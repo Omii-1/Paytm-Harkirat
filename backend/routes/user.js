@@ -2,7 +2,8 @@ const express = require("express")
 
 const router = express.Router()
 
-const {signupBody, signinBody} = require("../zod")
+const {signupBody, signinBody, updateBody} = require("../zod")
+const {authMiddleware} = require("../middleware")
 const {User} = require("../db")
 const jwt = require("jsonwebtoken")
 const {JWT_SECRET} = require("../config")
@@ -75,5 +76,47 @@ router.post("/signin", async(req, res) => {
     message: "Error while logging in"
   })
 })
+
+router.put("/update", authMiddleware, async(req, res) => {
+  const {success} = updateBody.safeParse(req.body)
+
+  if(!success){
+    return res.status(400).json({
+      message: "Error while updating information"
+    })
+  }
+
+  await User.updateOne({_id: req.userId}, req.body)
+
+  return res.status(200).json({
+    message: "User updated successfully"
+  })
+})
+
+router.get("/bulk", async(req, res) => {
+  const filter = req.query.filter
+  const users = await User.find({
+    $or: [{
+      firstName: {
+        "$regex": filter 
+      }
+    }, {
+      lastName: {
+        "$regex": filter
+      }
+    }]
+  })
+
+  return res.status(200).json({
+    users: users.map(user => ({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      _id: user._id
+    }))
+  })
+
+})
+
 
 module.exports = router
