@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const { lowercase, minLength, maxLength } = require("zod")
 
 const userSchema = mongoose.Schema({
   username: {

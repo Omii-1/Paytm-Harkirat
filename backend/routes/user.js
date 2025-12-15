@@ -9,11 +9,12 @@ const jwt = require("jsonwebtoken")
 const {JWT_SECRET} = require("../config")
 
 router.post("/signup", async(req, res) => {
-  const {success} = signupBody.safeParse(req.body)
+  const {success, error} = signupBody.safeParse(req.body)
 
   if(!success){
     return res.status(411).json({
-      message: "Email already taken / Wrong inputs"
+      message: "Email already taken / Wrong inputs",
+      errors: error.errors
     })
   }
 
@@ -70,7 +71,7 @@ router.post("/signin", async(req, res) => {
   if(user){
     const token = jwt.sign({
       userId
-    })
+    }, JWT_SECRET)
 
     return res.status(200).json({
       message: "Signin successfully",
