@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from './Button'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export function Users() {
 
@@ -29,13 +30,20 @@ export function Users() {
         <input type="text" placeholder='Search users ...' className='w-full px-2 py-1 border rounded border-slate-200' value={filter} onChange={handleChange}/>
       </div>
       <div>
-        {users.map(user => <User key={user._id} user={user}/> )}
+        {users.map(user => <User key={user._id} user={user} /> )}
       </div>
     </>
   )
 }
 
 const User = ({user}) => {
+
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    navigate(`/send?id=${user._id}&name=${user.firstName}`)
+  }
+  
   return (
     <div className='flex justify-between'>
       <div className='flex'>
@@ -52,7 +60,7 @@ const User = ({user}) => {
       </div>
 
       <div className='flex flex-col justify-center h-full'>
-        <Button label={"Send Money"} />
+        <Button label={"Send Money"} onClick={handleClick} />
       </div>
     </div>
   )
