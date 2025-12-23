@@ -8,8 +8,10 @@ export const Dashboard = () => {
   return (
     <div>
       <AppBar />
-      <Balance value={"3000"} />
-      <Users />
+      <div className='my-8 mx-36'>
+        <Balance value={"3000"} />
+        <Users />
+      </div>
     </div>
   )
 }

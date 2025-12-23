@@ -125,5 +125,17 @@ router.get("/bulk", async(req, res) => {
 
 })
 
+router.get("/getBalance", authMiddleware, async(req,res) => {
+  const userId = req.userId
+
+  const account = await Account.findOne({user: userId}).populate("user")
+
+  return res.status(200).json({
+    message: "User info fetch successfully",
+    username: account.user.firstName,
+    balance: account.balance
+  })
+})
+
 
 module.exports = router
