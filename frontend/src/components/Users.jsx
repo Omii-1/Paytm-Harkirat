@@ -1,13 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from './Button'
+import axios from 'axios'
 
 export function Users() {
 
-  const [users, setUsers] = useState([{
-    firstName: "Harkirat",
-    lastName: "Singh",
-    _id: 1
-  }])
+  const [users, setUsers] = useState([])
+  const [filter, setFilter] = useState("")
+
+  const handleChange = (e) => {
+    setFilter(e.target.value)
+  }
+
+  useEffect(() => {
+    const filterUser = async() => {
+      const res = await axios.get(`http://localhost:3000/api/v1/user/bulk?filter=${filter}`)
+      setUsers(res.data.users)
+    }
+
+    filterUser()
+  }, [filter])
 
   return (
     <>
@@ -15,7 +26,7 @@ export function Users() {
         Users
       </div>
       <div className='my-2'>
-        <input type="text" placeholder='Search users ...' className='w-full px-2 py-1 border rounded border-slate-200'/>
+        <input type="text" placeholder='Search users ...' className='w-full px-2 py-1 border rounded border-slate-200' value={filter} onChange={handleChange}/>
       </div>
       <div>
         {users.map(user => <User key={user._id} user={user}/> )}
