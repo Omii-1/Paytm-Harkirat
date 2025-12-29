@@ -11,6 +11,9 @@ export const Send = () => {
   const [amount, setAmount] = useState()
   const navigate = useNavigate()
 
+  console.log(localStorage.getItem("token"));
+  
+
   const handleChange = (e) => {
     setAmount(e.target.value)
   }
@@ -21,7 +24,7 @@ export const Send = () => {
       amount: amount
     }, {
       headers: {
-        Authorization: localStorage.getItem("token")
+        Authorization: "Bearer " + localStorage.getItem("token")
       }
     })
 

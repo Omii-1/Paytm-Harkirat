@@ -15,7 +15,7 @@ app.use("/api/v1", rootRouter)
 const port = 3000
 
 mongoose.connect(DB_URL)
-  .then(() => console.log("Connecting to mongoose"))
+  .then(() => console.log("Connected to mongoose"))
   .catch(err => console.log("MongoDB connection fail"))
 
 app.listen(port, () => {
